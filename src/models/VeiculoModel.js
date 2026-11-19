@@ -20,3 +20,5 @@ class VeiculoModel {
         return linhas[0];
     }
 }
+
+module.exports = VeiculoModel;

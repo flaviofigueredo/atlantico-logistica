@@ -1,6 +1,7 @@
 const { parse } = require('dotenv');
 const VeiculoView = require('../views/VeiculoView');
 const VeiculoModel = require('../models/VeiculoModel');
+
 class VeiculoController {
     static tratarErro(res, erro){
         if (erro.code === "ER_DUP_ENTRY" || erro.errno === 1062) {
@@ -23,7 +24,7 @@ class VeiculoController {
         try {
             const id_veiculo = parseInt(req.params.id, 10);
             if (isNaN(id_veiculo) || id_veiculo <= 0) {
-                return res.status(400).json(VeiuculoView.erro("Parâmetro inválido.", 400));
+                return res.status(400).json(VeiculoView.erro("Parâmetro inválido.", 400));
             }
 
             const veiculo = await VeiculoModel.buscarPorId(id_veiculo);
@@ -36,3 +37,5 @@ class VeiculoController {
         }
     }
 }
+
+module.exports = VeiculoController
