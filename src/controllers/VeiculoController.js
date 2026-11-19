@@ -24,7 +24,7 @@ class VeiculoController {
         try {
             const id_veiculo = parseInt(req.params.id, 10);
             if (isNaN(id_veiculo) || id_veiculo <= 0) {
-                return res.status(400).json(VeiuculoView.erro("Parâmetro inválido.", 400));
+                return res.status(400).json(VeiculoView.erro("Parâmetro inválido.", 400));
             }
 
             const veiculo = await VeiculoModel.buscarPorId(id_veiculo);

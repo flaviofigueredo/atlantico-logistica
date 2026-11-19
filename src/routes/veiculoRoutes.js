@@ -1,14 +1,14 @@
 const express = require("express");
-const routes = express.Router();
+const router = express.Router();
 const VeiculoControllers = require("../controllers/VeiculoController");
 const { verificarToken } = require("../middlewares/segurancaMiddleware");
 
 
-routes.get("/veiculo", VeiculoControllers.listar);
-routes.get("/veiculo/:id", VeiculoControllers.buscarPorId);
-routes.post("/veiculo", verificarToken, VeiculoControllers.cadastrar);
-routes.put("/veiculo/:id", verificarToken, VeiculoControllers.substiruir);
-routes.patch("/veiculo:id/estoque", verificarToken, VeiculoControllers.atualizarEstoque);
-routes.delete("/veiculo/:id", verificarToken, VeiculoControllers.delete);
+router.get("/veiculo", VeiculoControllers.listar);
+router.get("/veiculo/:id", VeiculoControllers.buscarPorId);
+router.post("/veiculo", verificarToken, VeiculoControllers.cadastrar);
+router.put("/veiculo/:id", verificarToken, VeiculoControllers.substiruir);
+router.patch("/veiculo:id/estoque", verificarToken, VeiculoControllers.atualizarEstoque);
+router.delete("/veiculo/:id", verificarToken, VeiculoControllers.delete);
 
-module.express = router;
+module.exports = router;
