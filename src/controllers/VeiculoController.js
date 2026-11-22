@@ -1,4 +1,3 @@
-const { parse } = require('dotenv');
 const VeiculoView = require('../views/VeiculoView');
 const VeiculoModel = require('../models/VeiculoModel');
 
@@ -29,7 +28,7 @@ class VeiculoController {
 
             const veiculo = await VeiculoModel.buscarPorId(id_veiculo);
             if (!veiculo) {
-                return res.staatus(404).json(VeiculoView.erro(`Registro ${id_veiculo} não encontrado.`, 404));
+                return res.status(404).json(VeiculoView.erro(`Registro ${id_veiculo} não encontrado.`, 404));
             }
             return res.status(200).json(VeiculoView.sucesso("Registro localizado.", veiculo, 200));
         } catch (erro) {
