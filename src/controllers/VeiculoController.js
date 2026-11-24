@@ -35,6 +35,31 @@ class VeiculoController {
             return VeiculoController.tratarErro(res, erro);
         }
     }
+     static async cadastrar(req, res) {
+        try {
+            const { id_veiculo, cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body;
+            if (!cd_placa || !nm_modelo || !ds_categoria) {
+                return res.status(400).json(VeiculoView.erro("Os campos cd_placa, nm_produto e ds_categoria devem estar preenchidos.", 400));
+            }
+            const valorDiaria = Number(vl_diaria_frete);
+            const quantidadeKm = qt_quilometragem !== undefined ? parseInt (qt_quilometragem, 10) : 0;
+            if (inNaN(valorDiaria) || valorDiaria <= 0 || isNaN(quantidadeKm) || quantidadeKm <0) {
+                return res.status(422).json(VeiculoView.erro("Erro 422: Os valores devem ser maior que 0 e não podem ser negativos.", 422));
+            }
+
+            const novoRegistro = await VeiculoModel.cadastrar({
+                id_veiculo: String(id_veiculo).trim().toUpperCase(),
+                cd_placa: String(cd_placa).trim().toUpperCase(),
+                nm_modelo: String(nm_modelo).trim(),
+                ds_cadegoria: String(ds_categoria).trim(),
+                vl_diaria_frete: valorDiaria,
+                qt_quilometragem: quantidadeKm
+            });
+            return res.status(201).json(VeiculoView.sucesso("Cadastro feito com sucesso.", novoRegistro, 201));
+        } catch (erro) {
+            return VeiculoController.tratarErro(res, erro);
+        }
+     }
 }
 
 module.exports = VeiculoController
