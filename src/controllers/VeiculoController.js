@@ -4,7 +4,7 @@ const VeiculoModel = require('../models/VeiculoModel');
 class VeiculoController {
     static tratarErro(res, erro){
         if (erro.code === "ER_DUP_ENTRY" || erro.errno === 1062) {
-            return res.status(409).json(VeiculoView.erro("Conflito (409): já está cadastrado.", 409));
+            return res.status(409).json(VeiculoView.erro("Conflito (409): a placa (cd_placa) já existe no sistema.", 409));
         }
         return res.status(500).json(VeiculoView.erro(`Falha interna no Servidor: ${erro.message}`, 500));
     }
@@ -37,21 +37,20 @@ class VeiculoController {
     }
      static async cadastrar(req, res) {
         try {
-            const { id_veiculo, cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body;
+            const { cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body || {};
             if (!cd_placa || !nm_modelo || !ds_categoria) {
-                return res.status(400).json(VeiculoView.erro("Os campos cd_placa, nm_produto e ds_categoria devem estar preenchidos.", 400));
+                return res.status(400).json(VeiculoView.erro("Os campos cd_placa, nm_modelo e ds_categoria devem estar preenchidos.", 400));
             }
             const valorDiaria = Number(vl_diaria_frete);
             const quantidadeKm = qt_quilometragem !== undefined ? parseInt (qt_quilometragem, 10) : 0;
-            if (inNaN(valorDiaria) || valorDiaria <= 0 || isNaN(quantidadeKm) || quantidadeKm <0) {
+            if (isNaN(valorDiaria) || valorDiaria <= 0 || isNaN(quantidadeKm) || quantidadeKm <0) {
                 return res.status(422).json(VeiculoView.erro("Erro 422: Os valores devem ser maior que 0 e não podem ser negativos.", 422));
             }
 
             const novoRegistro = await VeiculoModel.cadastrar({
-                id_veiculo: String(id_veiculo).trim().toUpperCase(),
                 cd_placa: String(cd_placa).trim().toUpperCase(),
                 nm_modelo: String(nm_modelo).trim(),
-                ds_cadegoria: String(ds_categoria).trim(),
+                ds_categoria: String(ds_categoria).trim(),
                 vl_diaria_frete: valorDiaria,
                 qt_quilometragem: quantidadeKm
             });
