@@ -70,7 +70,7 @@ document.getElementById("formGet").addEventListener("submit", async (evento) => 
     // Captura o valor digitado no campo de filtro
     const dsCategoriaFiltro = document.getElementById("getCategoria").value.trim();
     // Monta a base da URL oficial
-    let urlEndpoint = "/api/produtos";
+    let urlEndpoint = "/api/veiculos";
     
     // Se o usuário digitou uma categoria, nós acoplamos o "Query Parameter" na URL
     if (dsCategoriaFiltro !== "") {
@@ -117,7 +117,7 @@ document.getElementById("formPost").addEventListener("submit", async (evento) =>
     try {
         visorJson.textContent = "Enviando carga pesada com método POST...";
         // Dispara a requisição, agora com o verbo POST, Headers de Auth e o Body JSON
-        const requisicao = await fetch("/api/produtos", {
+        const requisicao = await fetch("/api/veiculos", {
             method: "POST",
             headers: obterHeaders(),
             body: cargaBodySerializada
@@ -142,7 +142,7 @@ document.getElementById("formPutBusca").addEventListener("submit", async (evento
     try {
         visorJson.textContent = `Puxando dados do produto ID ${idDesejado} no servidor (GET)...`;
         // Aproveita o verbo GET para ler os dados atuais no servidor
-        const requisicao = await fetch(`/api/produtos/${idDesejado}`, {
+        const requisicao = await fetch(`/api/veiculos/${idDesejado}`, {
             method: "GET",
             headers: { "Accept": "application/json" }
         });
@@ -196,7 +196,7 @@ document.getElementById("formPutSalvar").addEventListener("submit", async (event
     try {
         visorJson.textContent = "Executando processo de Sobrescrita Completa (PUT)...";
         // Dispara o comando PUT anexando o :id na URL e o pacote gigante no Body
-        const requisicao = await fetch(`/api/produtos/${idAlvoUrl}`, {
+        const requisicao = await fetch(`/api/veiculos/${idAlvoUrl}`, {
             method: "PUT",
             headers: obterHeaders(),
             body: JSON.stringify(objetoCompletoSubstituto)
@@ -218,7 +218,7 @@ document.getElementById("formPatchBusca").addEventListener("submit", async (even
 
     try {
         visorJson.textContent = `Lendo qt_estoque do Produto ID ${idDesejado}...`;
-        const requisicao = await fetch(`/api/produtos/${idDesejado}`, {
+        const requisicao = await fetch(`/api/veiculos/${idDesejado}`, {
             method: "GET",
             headers: { "Accept": "application/json" }
         });
@@ -256,8 +256,8 @@ document.getElementById("formPatchSalvar").addEventListener("submit", async (eve
 
     try {
         visorJson.textContent = "Executando Atualização Cirúrgica de Estoque (PATCH)...";
-        // Atenção à Rota Especializada: /api/produtos/:id/estoque
-        const requisicao = await fetch(`/api/produtos/${idAlvoUrl}/estoque`, {
+        // Atenção à Rota Especializada: /api/veiculos/:id/estoque
+        const requisicao = await fetch(`/api/veiculos/${idAlvoUrl}/estoque`, {
             method: "PATCH",
             headers: obterHeaders(),
             body: JSON.stringify(pequenoPacoteRemendo)
@@ -284,7 +284,7 @@ document.getElementById("formDelete").addEventListener("submit", async (evento) 
         
         // Ao contrário dos outros verbos de escrita, o DELETE raramente utiliza o Body da requisição.
         // A ordem de destruição é identificada inteiramente pela presença do ID na própria URL.
-        const requisicao = await fetch(`/api/produtos/${idAlvoDestruicao}`, {
+        const requisicao = await fetch(`/api/veiculos/${idAlvoDestruicao}`, {
             method: "DELETE",
             // Apenas o crachá de autorização viaja no pacote
             headers: { 
