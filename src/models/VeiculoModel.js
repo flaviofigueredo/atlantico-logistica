@@ -24,7 +24,7 @@ class VeiculoModel {
         const sql = "INSERT INTO tb_veiculos (cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem) VALUES (?, ?, ?, ?, ?)";
         const valores = [veiculo.cd_placa, veiculo.nm_modelo, veiculo.ds_categoria, veiculo.vl_diaria_frete, veiculo.qt_quilometragem];
         const [resultado] = await pool.execute(sql, valores)
-        return {id_veiculo: resultado.insertId, ...veiculo}
+        return {...veiculo, id_veiculo: resultado.insertId}
     }
 }
 
