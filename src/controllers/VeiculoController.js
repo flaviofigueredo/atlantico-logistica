@@ -58,7 +58,37 @@ class VeiculoController {
         } catch (erro) {
             return VeiculoController.tratarErro(res, erro);
         }
-     }
+    }
+
+    static async substituir(req,res) {
+        try {
+            const id_veiculo = parseInt(req.params.id, 10);
+            const { cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body;
+            const valorDiaria = Number(vl_diaria_frete);
+            const quantidadeKm = parseInt(qt_quilometragem, 10);
+            if (!cd_placa || !nm_modelo || !ds_categoria || !isNaN(valorDiaria) || valorDiaria <= 0 || isNaN(quantidadeKm) || quantidadeKm < 0) {
+                return res.status(400).json(VeiculoView.erro("Preencha todos os campos.", 400));
+            }
+            if (isNaN(valorDiaria) || valorDiaria < 0 || isNaN(quantidadeKm) || quantidadeKm < 0) {
+                return res.status(422).json(VeiculoView.erro("Informe um valor válido.", 422));
+            }
+            
+            const linhasAfetadas = await VeiculoModel.substituirCompleto({
+                cd_placa: String(cd_placa).trim().toUpperCase(),
+                nm_modelo: String(nm_modelo).trim(),
+                ds_categoria: String(ds_categoria).trim(),
+                vl_diaria_frete: valorDiaria,
+                qt_quilometragem: quantidadeKm
+            });
+            if (linhasAfetadas === 0) {
+                return res.status(404).json(VeiculoView.erro(`${id_veiculo} não existe no banco.`, 404));
+            }
+            const registroAtualizado = await VeiculoModel.buscarPorId(id_veiculo);
+            return res.status(200).json(VeiculoView.sucesso("Substituição feita com sucesso.", registroAtualizado, 200));
+        } catch (erro) {
+            return VeiculoController.tratarErro(res, erro);
+        }
+    }
 }
 
 module.exports = VeiculoController
