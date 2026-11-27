@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME, port: Number(process.env.DB_PORT), waitForConnections: true, connectionLimit: 10 
+    host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_NAME, port: Number(process.env.DB_PORT), waitForConnections: true, connectionLimit: 10, flags:["FOUND ROWS"] 
 });
 
 class VeiculoModel {
@@ -28,9 +28,9 @@ class VeiculoModel {
     }
 
     static async substituirCompleto(id_veiculo, veiculo) {
-        const sql = "SQL UPDATE tb_veiculos SET cd_placa = ?, nm_modelo = ?, ds_categoria = ?, vl_diaria_frete = ?, qt_quilometragem = ? WHERE id_veiculo = ?"
+        const sql = "UPDATE tb_veiculos SET cd_placa = ?, nm_modelo = ?, ds_categoria = ?, vl_diaria_frete = ?, qt_quilometragem = ? WHERE id_veiculo = ?"
         const valores = [veiculo.cd_placa, veiculo.nm_modelo, veiculo.ds_categoria, veiculo.vl_diaria_frete, veiculo.qt_quilometragem, id_veiculo]
-        const resultado = await pool.execute(sql, valores);
+        const [resultado] = await pool.execute(sql, valores);
         return resultado.affectedRows;
     }
 }

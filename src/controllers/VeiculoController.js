@@ -62,18 +62,21 @@ class VeiculoController {
 
     static async substituir(req,res) {
         try {
+            if (isNaN(id_veiculo) || id_veiculo <= 0){
+                return res.status(400).json(VeiculoView.erro("Parâmetro Inválido", 400))
+            }
             const id_veiculo = parseInt(req.params.id, 10);
-            const { cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body;
+            const { cd_placa, nm_modelo, ds_categoria, vl_diaria_frete, qt_quilometragem } = req.body || {};
             const valorDiaria = Number(vl_diaria_frete);
             const quantidadeKm = parseInt(qt_quilometragem, 10);
-            if (!cd_placa || !nm_modelo || !ds_categoria || !isNaN(valorDiaria) || valorDiaria <= 0 || isNaN(quantidadeKm) || quantidadeKm < 0) {
+            if (!cd_placa || !nm_modelo || !ds_categoria || vl_diaria_frete === undefined || vl_diaria_frete === "" || valorDiaria <= 0 || qt_quilometragem === undefined || qt_quilometragem === "") {
                 return res.status(400).json(VeiculoView.erro("Preencha todos os campos.", 400));
             }
             if (isNaN(valorDiaria) || valorDiaria < 0 || isNaN(quantidadeKm) || quantidadeKm < 0) {
                 return res.status(422).json(VeiculoView.erro("Informe um valor válido.", 422));
             }
             
-            const linhasAfetadas = await VeiculoModel.substituirCompleto({
+            const linhasAfetadas = await VeiculoModel.substituirCompleto(id_veiculo, {
                 cd_placa: String(cd_placa).trim().toUpperCase(),
                 nm_modelo: String(nm_modelo).trim(),
                 ds_categoria: String(ds_categoria).trim(),
